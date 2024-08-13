@@ -15,7 +15,7 @@ end
 function get_post_cage end
 
 function get_post_cage(sim::AbstractString, version::Int; root=root())
-    simdata_cage = joinpath(simzoo_simdata_dir(root, sim), cage_name(sim, version))
+    simdata_cage = find_simdata_cage(sim, version; root)
     return get_post_cage(simdata_cage)
 end
 
@@ -33,6 +33,10 @@ function get_new_cage(path::AbstractString, sim::AbstractString)
     cage = joinpath(path, cage_name(sim, version))
     @assert !isdir(cage)
     return cage
+end
+
+function find_simdata_cage(sim::AbstractString, version::Int; root=root())
+    return joinpath(simzoo_simdata_dir(root, sim), cage_name(sim, version))
 end
 
 function simzoo_sim_dir(root::AbstractString, sim::AbstractString)

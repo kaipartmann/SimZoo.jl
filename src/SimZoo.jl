@@ -2,7 +2,7 @@ module SimZoo
 
 using Printf, Tar, Dates, TOML, ReadableRegex
 
-export make_code_backup, get_simdata_cage, get_post_cage, root
+export make_code_backup, get_simdata_cage, get_post_cage, root, find_simdata_cage
 
 include("utils.jl")
 include("config.jl")
