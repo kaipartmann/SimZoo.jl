@@ -3,5 +3,11 @@ uuid = "9d27246e-0465-4394-a382-c479bf916cd9"
 authors = ["Kai Partmann"]
 version = "1.0.0-DEV"
 
+[deps]
+Dates = "ade2ca70-3891-5945-98fb-dc099432e06a"
+Printf = "de0858da-6303-5e67-8744-51eddeeeb8d7"
+ReadableRegex = "cbbcb084-453d-4c4c-b292-e315607ba6a4"
+Tar = "a4e569a6-e804-4fa4-b0f3-eef7a1d5b13e"
+
 [compat]
 julia = "1.6.7"
