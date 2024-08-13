@@ -51,6 +51,14 @@ function simzoo_post_dir(root::AbstractString, sim::AbstractString)
     return normpath(joinpath(simzoo_sim_dir(root, sim), "post"))
 end
 
+"""
+    get_latest_version(sim::AbstractString; root=root())
+"""
+function get_latest_version(sim::AbstractString; root=root())
+    path = simzoo_simdata_dir(root, sim)
+    return get_latest_version_of_cage(path, sim)
+end
+
 function get_latest_version_of_cage(path::AbstractString, sim::AbstractString)
     isdir(path) || return 0
     cages = filter(readdir(path, join=true, sort=true)) do cage
