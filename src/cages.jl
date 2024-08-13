@@ -1,22 +1,34 @@
 """
-    get_simdata_cage(root::AbstractString, sim::AbstractString)
+    get_simdata_cage(sim::AbstractString; root=root())
 
 Returns a versioned directory for a simulation named `sim` in the simzoo simulation results
 output database. It is not possible to overwrite in an existing directory. If a simulation
 already exists, the simulation version counter is increased.
 """
-function get_simdata_cage(root::AbstractString, sim::AbstractString)
-    return get_cage(simzoo_simdata_dir(root, sim), sim)
+function get_simdata_cage(sim::AbstractString; root=root())
+    return get_new_cage(simzoo_simdata_dir(root, sim), sim)
 end
 
 """
-    get_post_cage(root::AbstractString, sim::AbstractString)
+    get_post_cage(sim::AbstractString; root=root())
 """
-function get_post_cage(root::AbstractString, sim::AbstractString)
-    return get_cage(simzoo_post_dir(root, sim), sim)
+function get_post_cage end
+
+function get_post_cage(sim::AbstractString, version::Int; root=root())
+    simdata_cage = joinpath(simzoo_simdata_dir(root, sim), cage_name(sim, version))
+    return get_post_cage(simdata_cage)
 end
 
-function get_cage(path::AbstractString, sim::AbstractString)
+function get_post_cage(simdata_cage)
+    if !contains(simdata_cage, "simdata")
+        msg = "invalid simdata cage specified!\n"
+        throw(ArgumentError(msg))
+    end
+    post_cage = replace(simdata_cage, "simdata" => "post")
+    return post_cage
+end
+
+function get_new_cage(path::AbstractString, sim::AbstractString)
     version = get_new_version_of_cage(path, sim)
     cage = joinpath(path, cage_name(sim, version))
     @assert !isdir(cage)
@@ -60,7 +72,7 @@ function extract_from_path(path::AbstractString)
         sim = last(path_base_divided)
     elseif n_splits > 3
         version_str = first(path_base_divided)
-        sim = prod(path_base_divided[begin+1:end])
+        sim = prod(path_base_divided[begin+2:end])
     else
         msg = "incorrect simzoo outdir!\n"
         msg *= "The outdir should contain an arbitrary string as simulation name, divided\n"
